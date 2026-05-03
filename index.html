@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Suhaas. | Classified System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root {
+  --void: #000000;
+  --blood: #8b1a1a;
+  --ember: #c0392b;
+  --fire: #e8521e;
+  --text: #ffffff;
+  --text2: #d0c6bf;
+  --text3: rgba(255,255,255,0.72);
+  --border: rgba(255,255,255,0.055);
+  --border-r: rgba(180,60,30,0.22);
+  --glass: rgba(8,0,4,0.84);
+  --db-bg: #0c0606;
+  --db-side: #080404;
+  --db-bdr: rgba(140,40,20,0.18);
+  --db-text: #f1ece8;
+  --db-text2: #d0c3bb;
+  --db-text3: rgba(255,255,255,0.68);
+  --db-acc: #c0392b;
+  --db-acc2: #e8521e;
+  --db-hov: rgba(200,60,30,0.07);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  cursor: none !important;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: "Rajdhani", sans-serif;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  mix-blend-mode: overlay;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  background: radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(0,0,0,0.88) 100%);
+}
+
+#demo-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.86);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+#demo-loader-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.demo-loader-panel {
+  max-width: 420px;
+  width: calc(100% - 48px);
+  padding: 28px 28px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 8, 8, 0.96);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
+  border-radius: 18px;
+  text-align: center;
+}
+
+.demo-loader-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.demo-loader-sub {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 22px;
+}
+
+.loader-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.loader-dots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.72);
+  opacity: 0.35;
+  animation: loader-dots 1s infinite ease-in-out;
+}
+
+.loader-dots span:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.loader-dots span:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+@keyframes loader-dots {
+  0%, 100% { opacity: 0.35; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-4px); }
+}
+
+#cursor {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+#cursor-char {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 36px;
+  transform: translate(-50%, -50%);
+  transition: transform 0.08s ease, filter 0.18s ease;
+  filter: drop-shadow(0 0 12px rgba(220,90,60,0.45));
+}
+
+#cursor-char .cursor-arrow {
+  fill: rgba(232,82,30,0.95);
+  stroke: rgba(255,180,150,0.95);
+  stroke-width: 1.2;
+}
+
+#cursor-char .cursor-glow {
+  opacity: 0.65;
+}
+
+#cursor-char.hov {
+  filter: drop-shadow(0 0 16px rgba(232,82,30,0.65)) drop-shadow(0 0 28px rgba(255,160,120,0.35));
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+#nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  padding: 20px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid transparent;
+  transition: background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
+}
+
+#nav.scrolled {
+  background: rgba(0,0,0,0.97);
+  border-color: rgba(140,30,20,0.18);
+  backdrop-filter: blur(16px);
+}
+
+.nav-id {
+  font-family: "Anton", sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.14em;
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+}
+
+.nav-id::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--ember), transparent);
+}
+
+.nav-ops {
+  display: flex;
+  gap: 38px;
+  list-style: none;
+}
+
+.nav-ops a {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--text2);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.nav-ops a::before {
+  content: "// ";
+  color: var(--blood);
+  opacity: 0.78;
+  transition: opacity 0.2s ease;
+}
+
+.nav-ops a:hover {
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(232,82,30,0.16);
+}
+
+.nav-ops a:hover::before {
+  opacity: 1;
+}
+
+#scroll-scene {
+  position: relative;
+  height: 188vh;
+}
+
+#stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#stage-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 75% 60% at 75% -10%, rgba(170,35,10,0.28) 0%, transparent 58%),
+    radial-gradient(ellipse 45% 45% at 100% 0%, rgba(130,20,6,0.22) 0%, transparent 48%),
+    radial-gradient(ellipse 55% 65% at 0% 105%, rgba(0,0,0,0.72) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 8% 80%, rgba(2,0,0,0.55) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 115%, rgba(50,4,1,0.6) 0%, transparent 58%),
+    #020000;
+}
+
+#stage-light {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 82% -12%, rgba(210,60,18,0.18) 0%, transparent 62%),
+    radial-gradient(ellipse 28% 28% at 100% 0%, rgba(235,80,22,0.11) 0%, transparent 50%),
+    radial-gradient(ellipse 35% 55% at 0% 100%, rgba(0,0,0,0.45) 0%, transparent 60%);
+}
+
+#watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.055;
+  width: min(520px, 75vw);
+  will-change: transform;
+}
+
+#hero-content {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 88px 6vw 24vh;
+  pointer-events: auto;
+}
+
+.sys-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.sys-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--fire);
+  border-radius: 50%;
+  box-shadow: 0 0 7px rgba(232,82,30,0.9);
+  animation: flicker 3.5s ease infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  42% { opacity: 0.9; }
+  48% { opacity: 0.25; }
+  54% { opacity: 1; }
+  82% { opacity: 0.8; }
+}
+
+.sys-tag {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  color: var(--text2);
+  text-transform: uppercase;
+}
+
+.sys-badge {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.84);
+  padding: 2px 8px;
+  border: 1px solid rgba(180,60,30,0.28);
+}
+
+.title-block {
+  position: relative;
+  line-height: 0.84;
+  margin-bottom: 18px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35em;
+}
+
+.title-block::before {
+  content: "";
+  position: absolute;
+  left: -6%;
+  top: -20%;
+  width: 70%;
+  height: 145%;
+  background:
+    radial-gradient(ellipse 75% 65% at 28% 45%, rgba(190,45,15,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 10% 60%, rgba(140,25,8,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.t1,
+.t2 {
+  display: block;
+  font-family: "Anton", sans-serif;
+  font-size: clamp(5rem, 13.5vw, 12.5rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0;
+  position: relative;
+}
+
+.t1 {
+  color: var(--text);
+  transform: translateY(20px);
+  text-shadow:
+    0 2px 0 rgba(0,0,0,0.95),
+    0 0 40px rgba(220,70,25,0.22),
+    0 0 90px rgba(210,55,18,0.11),
+    0 0 180px rgba(200,45,12,0.06);
+  z-index: 2;
+}
+
+.t2 {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(155,75,45,0.48);
+  text-shadow: 0 0 55px rgba(180,55,20,0.18), 0 0 120px rgba(160,40,12,0.09);
+  transform: translateY(14px);
+  margin-top: -0.06em;
+  z-index: 1;
+  user-select: none;
+}
+
+.hero-word {
+  display: inline-block;
+  transition: transform 0.28s ease, color 0.28s ease, text-shadow 0.28s ease;
+  word-spacing: 0.2em;
+}
+
+.hero-word:hover {
+  transform: translateY(-1px);
+}
+
+.highlight-word {
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0 0 18px rgba(255,255,255,0.22), 0 0 42px rgba(255,220,180,0.12);
+}
+
+.highlight-word:hover {
+  color: #ffffff;
+  text-shadow: 0 0 28px rgba(255,255,255,0.35), 0 0 58px rgba(255,220,180,0.22);
+}
+
+.t1 .hero-word,
+.t2 .hero-word {
+  animation: hero-breathe 6.4s ease-in-out infinite alternate;
+}
+
+.t2 .hero-word:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.t2 .hero-word:nth-child(2) {
+  animation-delay: 0.22s;
+}
+
+@keyframes hero-breathe {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.01); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.hero-name {
+  font-family: "Share Tech Mono", monospace;
+  font-size: clamp(0.72rem, 1vw, 0.86rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(200,155,130,0.72);
+  margin-bottom: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.hero-role {
+  font-family: "Share Tech Mono", monospace;
+  font-size: clamp(0.62rem, 0.92vw, 0.75rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.78);
+  margin-bottom: 18px;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.hdiv {
+  width: 52px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--ember), transparent);
+  margin-bottom: 16px;
+  opacity: 0;
+}
+
+.hsub {
+  font-size: clamp(0.85rem, 1.25vw, 1.05rem);
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--text2);
+  max-width: 520px;
+  letter-spacing: 0.04em;
+  margin-bottom: 28px;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.hsub strong {
+  color: rgba(200,155,130,0.8);
+  font-weight: 500;
+}
+
+.hctas {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.btn-init {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  padding: 13px 32px;
+  border: 1px solid rgba(175,55,25,0.48);
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  transition: color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+  box-shadow: 0 0 0 rgba(200,60,30,0);
+  animation: ctapulse 4s ease-in-out 2.5s infinite;
+}
+
+@keyframes ctapulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(200,60,30,0), 0 0 14px rgba(200,55,18,0); }
+  50% { box-shadow: 0 0 12px rgba(200,60,30,0.18), 0 0 28px rgba(200,55,18,0.08); }
+}
+
+.btn-init::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--blood), var(--ember));
+  transform: translateX(-105%);
+  transition: transform 0.34s cubic-bezier(0.4,0,0.2,1);
+  z-index: -1;
+}
+
+.btn-init:hover {
+  border-color: rgba(220,80,30,0.8);
+  color: #fff;
+  box-shadow: 0 0 22px rgba(200,60,30,0.28), 0 0 50px rgba(180,45,12,0.12);
+  animation: none;
+}
+
+.btn-init:hover::before {
+  transform: translateX(0);
+}
+
+.btn-init::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid var(--fire);
+  border-right: 1px solid var(--fire);
+}
+
+.btn-ghost {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text3);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.btn-ghost:hover {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(232,82,30,0.14);
+}
+
+.bg-line {
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.28s ease;
+}
+
+.btn-ghost:hover .bg-line {
+  width: 42px;
+}
+
+#stats-row {
+  position: absolute;
+  bottom: 20px;
+  left: 6vw;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: min(640px, 80vw);
+  z-index: 6;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.st-item {
+  min-width: 0;
+  min-height: 82px;
+  padding: 14px 16px;
+  border: 1px solid rgba(140,40,20,0.12);
+  background: rgba(255,255,255,0.012);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+}
+
+.st-n {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.85rem;
+  color: var(--text);
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.st-n em {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.76rem;
+  font-style: normal;
+  color: var(--ember);
+}
+
+.st-l {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+#scroll-cue {
+  position: absolute;
+  right: 6vw;
+  bottom: 36px;
+  z-index: 6;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text3);
+  opacity: 0;
+  writing-mode: vertical-rl;
+  animation: cue 3s ease 3s infinite;
+}
+
+@keyframes cue {
+  0%, 100% { opacity: 0.2; transform: translateY(0); }
+  50% { opacity: 0.5; transform: translateY(5px); }
+}
+
+#dashboard-wrap {
+  position: absolute;
+  bottom: max(-4vh, -24px);
+  left: 50%;
+  transform: translateX(-50%) translateY(60px) scale(0.96);
+  width: min(1020px, 92vw);
+  z-index: 8;
+  opacity: 0;
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+#dashboard,
+#dashboard * {
+  pointer-events: auto;
+}
+
+#projects-anchor {
+  position: absolute;
+  top: 56vh;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+#dashboard {
+  background: var(--db-bg);
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 -20px 120px rgba(0,0,0,0.97), 0 0 0 1px rgba(140,40,20,0.15), inset 0 1px 0 rgba(200,60,30,0.07);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 470px;
+}
+
+.db-chrome {
+  display: flex;
+  align-items: center;
+  padding: 10px 18px;
+  background: var(--db-side);
+  border-bottom: 1px solid var(--db-bdr);
+  flex-shrink: 0;
+}
+
+.db-dots {
+  display: flex;
+  gap: 6px;
+  margin-right: 13px;
+}
+
+.db-dots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: block;
+}
+
+.db-dots span:nth-child(1) { background: #7a1010; }
+.db-dots span:nth-child(2) { background: #7a5010; }
+.db-dots span:nth-child(3) { background: #2a4c20; }
+
+.db-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--db-text3);
+  flex: 1;
+  text-align: center;
+}
+
+.db-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--db-text3);
+}
+
+.db-sdot {
+  width: 5px;
+  height: 5px;
+  background: var(--fire);
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(232,82,30,0.8);
+}
+
+.db-body {
+  display: flex;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.db-sidebar {
+  width: 175px;
+  flex-shrink: 0;
+  background: var(--db-side);
+  border-right: 1px solid var(--db-bdr);
+  padding: 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  position: relative;
+  z-index: 3;
+}
+
+.db-nlabel {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--db-text3);
+  padding: 0 11px;
+  margin: 7px 0 3px;
+}
+
+.db-ni {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 11px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--db-text2);
+  margin: 0 4px;
+  border-radius: 1px;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.db-ni:hover {
+  background: var(--db-hov);
+  color: var(--db-text);
+}
+
+.db-ni.active {
+  background: rgba(180,40,20,0.1);
+  color: var(--db-acc);
+}
+
+.db-badge {
+  margin-left: auto;
+  font-family: "Share Tech Mono", monospace;
+  background: var(--db-acc);
+  color: #000;
+  font-size: 0.54rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 1px;
+}
+
+.db-main {
+  flex: 1;
+  padding: 14px 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.db-mhdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.db-mtitle {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--db-text);
+}
+
+.db-msub {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: var(--db-text3);
+  margin-top: 2px;
+  letter-spacing: 0.08em;
+}
+
+.db-acts {
+  display: flex;
+  gap: 5px;
+}
+
+.db-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  border-radius: 1px;
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  border: 1px solid var(--db-bdr);
+  cursor: pointer;
+  background: transparent;
+  color: var(--db-text2);
+  font-family: "Share Tech Mono", monospace;
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.db-btn:hover {
+  border-color: var(--db-acc);
+  color: var(--db-acc);
+}
+
+.db-btn-f {
+  background: rgba(180,40,20,0.28);
+  color: var(--db-acc);
+  border-color: rgba(180,40,20,0.38);
+}
+
+.db-btn-f:hover {
+  background: rgba(180,40,20,0.46);
+}
+
+.db-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--db-bdr);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.db-tab {
+  padding: 4px 11px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.63rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--db-text3);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.db-tab:hover {
+  color: var(--db-text);
+}
+
+.db-tab.active {
+  color: var(--db-acc);
+  border-bottom-color: var(--db-acc);
+}
+
+.proj-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 14px 14px 12px;
+  border-radius: 1px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(140,40,20,0.12);
+  background: rgba(255,255,255,0.01);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.proj-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--ember), transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.proj-row:hover {
+  background: rgba(200,40,20,0.055);
+  border-color: rgba(200,55,20,0.28);
+  transform: translateY(-1px) scale(1.002);
+  box-shadow: 0 6px 32px rgba(0,0,0,0.55), 0 0 20px rgba(180,45,15,0.1);
+}
+
+.proj-row:hover::before {
+  opacity: 1;
+}
+
+.proj-row.ar {
+  background: rgba(180,40,20,0.07);
+  border-color: rgba(200,55,20,0.22);
+}
+
+.proj-row.ar::before {
+  opacity: 0.6;
+}
+
+.proj-row.featured {
+  background: rgba(180,45,15,0.07);
+  border-color: rgba(200,60,20,0.28);
+  margin-bottom: 10px;
+}
+
+.proj-row.featured::before {
+  opacity: 1;
+  width: 3px;
+}
+
+.proj-row.featured .pname {
+  font-size: 1.14rem;
+  color: var(--text);
+}
+
+.proj-row.featured:hover {
+  background: rgba(200,50,18,0.10);
+  border-color: rgba(220,75,28,0.42);
+  transform: translateY(-2px) scale(1.003);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.65), 0 0 28px rgba(180,50,15,0.16);
+}
+
+.pfeatured-badge {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(220,100,40,0.9);
+  border: 1px solid rgba(200,70,20,0.35);
+  padding: 1px 6px;
+  border-radius: 1px;
+  margin-left: 8px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.proj-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.picon {
+  width: 34px;
+  height: 34px;
+  border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-family: "Share Tech Mono", monospace;
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+  border: 1px solid rgba(140,40,20,0.14);
+}
+
+.phead {
+  flex: 1;
+  min-width: 0;
+}
+
+.pname {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--db-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 1px;
+  line-height: 1.2;
+}
+
+.pstat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--db-text3);
+}
+
+.sdot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sl {
+  background: var(--fire);
+  box-shadow: 0 0 5px rgba(232,82,30,0.7);
+}
+
+.sw {
+  background: #b8860b;
+}
+
+.sd {
+  background: #4a6060;
+}
+
+.pdesc {
+  font-size: 0.88rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.82);
+  margin-bottom: 9px;
+}
+
+.pmetrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 16px;
+  margin-bottom: 10px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.pmetric {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  color: var(--db-text2);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pmetric::before {
+  content: ">";
+  color: var(--ember);
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.pmetric strong {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 0.88rem;
+  color: rgba(210,140,80,0.95);
+  letter-spacing: 0.04em;
+  font-weight: 400;
+}
+
+.pfoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(140,40,20,0.1);
+  margin-top: 2px;
+}
+
+.ptags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.ptag {
+  padding: 2px 7px;
+  border-radius: 1px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.08em;
+  border: 1px solid;
+}
+
+.pr {
+  border-color: rgba(180,40,20,0.3);
+  color: var(--ember);
+}
+
+.po {
+  border-color: rgba(200,100,40,0.28);
+  color: var(--fire);
+}
+
+.pw {
+  border-color: rgba(255,255,255,0.08);
+  color: var(--db-text3);
+}
+
+.pactions {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.pact {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 1px;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.pact-primary {
+  border-color: rgba(180,55,20,0.45);
+  color: var(--ember);
+  background: rgba(180,45,15,0.08);
+}
+
+.pact-primary:hover {
+  background: rgba(180,45,15,0.22);
+  border-color: rgba(210,70,25,0.65);
+  color: rgba(230,120,60,1);
+}
+
+.pact-ghost {
+  border-color: rgba(255,255,255,0.07);
+  color: var(--db-text3);
+  background: transparent;
+}
+
+.pact-ghost:hover {
+  border-color: rgba(255,255,255,0.14);
+  color: var(--db-text2);
+}
+
+#below {
+  position: relative;
+  z-index: 5;
+  background: linear-gradient(180deg, #040002 0%, #020001 100%);
+  padding: 78px 0 44px;
+}
+
+#below::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 45% 28% at 8% 50%, rgba(140,28,10,0.065) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 28% at 92% 20%, rgba(120,28,10,0.05) 0%, transparent 70%);
+}
+
+.wrap {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.slabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ember);
+  margin-bottom: 14px;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.slabel::before {
+  content: "//";
+  color: var(--blood);
+  margin-right: 2px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  gap: 44px 36px;
+  align-items: start;
+  margin-bottom: 60px;
+}
+
+.profile-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  grid-column: 1 / -1;
+  margin-top: 10px;
+}
+
+.profile-block {
+  background: rgba(255,255,255,0.01);
+  border: 1px solid rgba(140,40,20,0.14);
+  padding: 24px 26px;
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.profile-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.profile-name {
+  font-family: "Anton", sans-serif;
+  font-size: clamp(1.7rem, 2.7vw, 2.4rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.profile-role {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(195,150,118,0.78);
+}
+
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mini-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border: 1px solid rgba(180,55,20,0.26);
+  background: rgba(180,45,15,0.05);
+  color: var(--text2);
+  text-decoration: none;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+
+.mini-btn:hover {
+  color: var(--ember);
+  border-color: rgba(210,70,25,0.5);
+  background: rgba(180,45,15,0.14);
+}
+
+.resume-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.resume-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.resume-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+}
+
+.resume-panel {
+  position: relative;
+  z-index: 2;
+  width: min(980px, 92vw);
+  height: min(88vh, 920px);
+  background: #090303;
+  border: 1px solid rgba(180,55,20,0.2);
+  box-shadow: 0 20px 120px rgba(0,0,0,0.75);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.resume-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(140,40,20,0.16);
+  background: #080404;
+}
+
+.resume-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.resume-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.resume-close {
+  border: 0;
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0;
+}
+
+.resume-close:hover {
+  color: var(--ember);
+}
+
+.resume-frame {
+  width: 100%;
+  flex: 1;
+  border: 0;
+  background: #120808;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+  gap: 20px;
+}
+
+.profile-card {
+  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.012);
+  padding: 22px 24px;
+  min-width: 0;
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.pc-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.84);
+  margin-bottom: 12px;
+}
+
+.pc-copy {
+  font-size: 0.92rem;
+  line-height: 1.95;
+  letter-spacing: 0.03em;
+  color: var(--text2);
+}
+
+.contact-list,
+.skill-list,
+.highlight-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-list li,
+.skill-list li,
+.highlight-list li {
+  color: var(--text2);
+  font-size: 0.88rem;
+  line-height: 1.8;
+}
+
+.contact-list a {
+  color: rgba(255,255,255,0.84);
+  text-decoration: none;
+}
+
+.contact-list a:hover {
+  color: var(--ember);
+}
+
+.label-line {
+  display: inline-block;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  min-width: 88px;
+}
+
+.skill-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.skill-group strong {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(195,150,118,0.8);
+}
+
+.highlight-title {
+  display: block;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.edu-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: baseline;
+}
+
+.edu-row strong {
+  color: var(--text);
+}
+
+.about-h {
+  font-family: "Anton", sans-serif;
+  font-size: clamp(1.7rem, 2.8vw, 2.7rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.about-h em {
+  font-style: normal;
+  color: var(--ember);
+}
+
+.about-p {
+  font-size: 0.96rem;
+  line-height: 1.85;
+  color: var(--text2);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.chip {
+  padding: 4px 11px;
+  border: 1px solid rgba(255,255,255,0.055);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.67rem;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.chip:hover {
+  border-color: rgba(200,60,30,0.28);
+  color: var(--ember);
+}
+
+.chip.hi {
+  border-color: rgba(175,50,20,0.28);
+  color: rgba(195,115,75,0.9);
+}
+
+.chip.hi2 {
+  border-color: rgba(155,75,35,0.22);
+  color: rgba(175,95,55,0.8);
+}
+
+.terminal {
+  background: #050001;
+  border: 1px solid rgba(140,40,20,0.18);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.terminal::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ember), transparent);
+  opacity: 0.35;
+}
+
+.t-top {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 14px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid rgba(140,40,20,0.14);
+}
+
+.t-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.t-fname {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  margin-left: 5px;
+}
+
+.tl {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.76rem;
+  line-height: 1.95;
+  color: var(--text2);
+}
+
+.tl .k { color: var(--ember); }
+.tl .v { color: rgba(175,138,118,0.9); }
+.tl .s { color: rgba(195,158,118,0.7); }
+
+.stack-section {
+  margin-bottom: 56px;
+}
+
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 9px;
+  margin-top: 26px;
+}
+
+.stack-card {
+  background: rgba(255,255,255,0.01);
+  border: 1px solid rgba(255,255,255,0.038);
+  padding: 15px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.stack-card:hover {
+  border-color: rgba(175,50,20,0.2);
+  background: rgba(200,50,20,0.035);
+}
+
+.si {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--ember);
+  margin-bottom: 7px;
+}
+
+.sn {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  color: rgba(255,255,255,0.86);
+}
+
+.sr {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+}
+
+footer {
+  background: #020000;
+  border-top: 1px solid rgba(140,40,20,0.1);
+  padding: 22px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.f-name {
+  font-family: "Anton", sans-serif;
+  letter-spacing: 0.12em;
+  font-size: 0.95rem;
+  line-height: 1.1;
+}
+
+.f-name b {
+  color: var(--ember);
+}
+
+.f-role {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-top: 3px;
+}
+
+.f-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.f-links {
+  display: flex;
+  gap: 26px;
+  list-style: none;
+}
+
+.f-links a {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  text-decoration: none;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.f-links a:hover {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(232,82,30,0.14);
+}
+
+.f-copy {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  #nav {
+    padding: 15px 20px;
+  }
+
+  .nav-ops {
+    display: none;
+  }
+
+  #scroll-scene {
+    height: 172vh;
+  }
+
+  #hero-content {
+    padding: 86px 20px 27vh;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stack-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wrap {
+    padding: 0 20px;
+  }
+
+  footer {
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+  }
+
+  .f-copy {
+    text-align: center;
+  }
+
+  .db-sidebar {
+    display: none;
+  }
+
+  #dashboard-wrap {
+    width: 96vw;
+    bottom: -14px;
+  }
+
+  .hctas {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #stats-row {
+    grid-template-columns: 1fr;
+    width: min(320px, calc(100vw - 40px));
+    left: 20px;
+    bottom: 16px;
+  }
+
+  #scroll-cue {
+    display: none;
+  }
+
+  .db-mhdr,
+  .pfoot {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pactions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .resume-modal {
+    padding: 12px;
+  }
+
+  .resume-panel {
+    width: 100%;
+    height: 88vh;
+  }
+
+  .t1,
+  .t2 {
+    font-size: clamp(3rem, 17vw, 6.5rem);
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor">
+  <svg id="cursor-char" viewBox="0 0 32 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path class="cursor-arrow" d="M4 2 L28 16 L18 18 L22 32 L14 24 L6 34 Z" />
+    <circle class="cursor-glow" cx="20" cy="18" r="3" fill="rgba(255,170,110,0.75)" />
+  </svg>
+</div>
+
+<nav id="nav">
+  <a href="#top" class="nav-id">Suhaas.</a>
+  <ul class="nav-ops">
+    <li><a href="#projects-anchor">Operations</a></li>
+    <li><a href="#identity">Identity</a></li>
+    <li><a href="#contact">Comm</a></li>
+  </ul>
+</nav>
+
+<div id="top"></div>
+
+<div id="scroll-scene">
+<div id="stage">
+  <div id="stage-bg"></div>
+  <div id="stage-light"></div>
+
+  <svg id="watermark" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true">
+    <circle cx="200" cy="200" r="185" stroke="rgba(200,60,30,1)" stroke-width="1.2" />
+    <circle cx="200" cy="200" r="155" stroke="rgba(200,60,30,1)" stroke-width="0.6" stroke-dasharray="6 4" />
+    <line x1="200" y1="15" x2="200" y2="60" stroke="rgba(200,60,30,1)" stroke-width="1.2" />
+    <line x1="200" y1="340" x2="200" y2="385" stroke="rgba(200,60,30,1)" stroke-width="1.2" />
+    <line x1="15" y1="200" x2="60" y2="200" stroke="rgba(200,60,30,1)" stroke-width="1.2" />
+    <line x1="340" y1="200" x2="385" y2="200" stroke="rgba(200,60,30,1)" stroke-width="1.2" />
+    <line x1="69" y1="69" x2="86" y2="86" stroke="rgba(200,60,30,1)" stroke-width="1" />
+    <line x1="331" y1="69" x2="314" y2="86" stroke="rgba(200,60,30,1)" stroke-width="1" />
+    <line x1="69" y1="331" x2="86" y2="314" stroke="rgba(200,60,30,1)" stroke-width="1" />
+    <line x1="331" y1="331" x2="314" y2="314" stroke="rgba(200,60,30,1)" stroke-width="1" />
+    <polygon points="200,172 228,200 200,228 172,200" stroke="rgba(200,60,30,1)" stroke-width="1.2" />
+    <circle cx="200" cy="200" r="4" fill="rgba(200,60,30,1)" />
+    <circle cx="200" cy="200" r="22" stroke="rgba(200,60,30,1)" stroke-width="0.8" stroke-dasharray="3 9" />
+    <text x="200" y="256" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="11" letter-spacing="6" fill="rgba(200,60,30,1)">CLASSIFIED</text>
+    <text x="200" y="150" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="9" letter-spacing="4" fill="rgba(200,60,30,1)">SYS // 001</text>
+  </svg>
+
+  <div id="hero-content">
+    <div class="sys-line" id="sl">
+      <span class="sys-dot"></span>
+      <span class="sys-tag">System Online</span>
+      <span class="sys-badge">Access: Granted</span>
+    </div>
+
+    <div class="title-block">
+      <span class="t1" id="t1"><span class="hero-word">Architect</span></span>
+      <span class="t2" id="t2">
+        <span class="hero-word">Of</span>
+        <span class="hero-word highlight-word">Systems</span>
+      </span>
+    </div>
+
+    <div class="hero-name" id="hn">Suhaas Choudary Mallavarapu</div>
+    <div class="hero-role" id="hr">Full-Stack Developer &bull; ML Systems</div>
+    <div class="hdiv" id="hd"></div>
+
+    <p class="hsub" id="hs">
+      Operating in the dark to build <strong>scalable backend systems</strong>,
+      cinematic user interfaces, and <strong>intelligent machine learning models</strong>.
+      Precision, performance, and power.
+    </p>
+
+    <div class="hctas" id="hc">
+      <a href="#projects-anchor" class="btn-init">Initiate Sequence</a>
+      <a href="https://github.com/suhaas2006" target="_blank" rel="noopener" class="btn-ghost">
+        <span class="bg-line"></span>GitHub Protocol
+      </a>
+    </div>
+  </div>
+
+  <div id="stats-row">
+    <div class="st-item">
+      <div class="st-n">3<em>+</em></div>
+      <div class="st-l">Live Projects</div>
+    </div>
+    <div class="st-item">
+      <div class="st-n">300<em>+</em></div>
+      <div class="st-l">Images Processed</div>
+    </div>
+    <div class="st-item">
+      <div class="st-n">FS<em>+</em>ML</div>
+      <div class="st-l">Primary Focus</div>
+    </div>
+  </div>
+
+  <div id="scroll-cue">Scroll to Infiltrate</div>
+
+  <div id="projects-anchor"></div>
+  <div id="dashboard-wrap">
+    <div id="dashboard">
+      <div class="db-chrome">
+        <div class="db-dots"><span></span><span></span><span></span></div>
+        <div class="db-title">// Classified . suhaas.system . project dossier</div>
+        <div class="db-status"><span class="db-sdot"></span>Secure Channel</div>
+      </div>
+      <div class="db-body">
+        <div class="db-sidebar">
+          <div class="db-nlabel">Sections</div>
+          <a class="db-ni active" href="#projects-anchor" data-section-link="projects">
+            <svg width="10" height="10" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <rect x="1" y="1" width="5" height="5" rx="0.5" fill="currentColor"></rect>
+              <rect x="8" y="1" width="5" height="5" rx="0.5" fill="currentColor"></rect>
+              <rect x="1" y="8" width="5" height="5" rx="0.5" fill="currentColor"></rect>
+              <rect x="8" y="8" width="5" height="5" rx="0.5" fill="currentColor"></rect>
+            </svg>
+            Projects <span class="db-badge">3</span>
+          </a>
+          <a class="db-ni" href="#identity" data-section-link="identity">
+            <svg width="10" height="10" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.5"></circle>
+              <path d="M1 13c0-3.314 2.686-5 6-5s6 1.686 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            </svg>
+            Identity
+          </a>
+          <a class="db-ni" href="#arsenal" data-section-link="arsenal">
+            <svg width="10" height="10" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M2 4h10M2 7h7M2 10h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            </svg>
+            Arsenal
+          </a>
+          <div class="db-nlabel">Links</div>
+          <a class="db-ni" href="https://github.com/suhaas2006" target="_blank" rel="noopener">
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" style="opacity:.45" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+            GitHub
+          </a>
+          <a class="db-ni" href="assets/resume/resume.pdf" target="_blank" rel="noopener">
+            <svg width="10" height="10" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M7 1v7M4.5 5.5L7 8l2.5-2.5M2 10.5h10v2H2z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            Resume
+          </a>
+        </div>
+
+        <div class="db-main" id="projects">
+          <div class="db-mhdr">
+            <div>
+              <div class="db-mtitle">// Mission Dossier</div>
+              <div class="db-msub">3 operations . status: active . tap to inspect</div>
+            </div>
+            <div class="db-acts">
+              <button class="db-btn" type="button">Filter</button>
+              <button class="db-btn db-btn-f" type="button">All Files</button>
+            </div>
+          </div>
+
+          <div class="db-tabs">
+          <div class="db-tab active" data-filter="all">All</div>
+          <div class="db-tab" data-filter="full-stack">Full-Stack</div>
+          <div class="db-tab" data-filter="ml">ML / Vision</div>
+          <div class="db-tab" data-filter="tooling">Tooling</div>
+        </div>
+
+          <div class="proj-row featured ar" data-category="full-stack">
+            <div class="proj-top">
+              <div class="picon" style="background:rgba(160,50,15,0.14)">SYS</div>
+              <div class="phead">
+                <div class="pname">Smart Task Manager <span class="pfeatured-badge">Featured</span></div>
+                <div class="pstat"><span class="sdot sl"></span>Live - Deployed</div>
+              </div>
+            </div>
+            <div class="pdesc">Developed a full-stack task management system with real-time updates and a responsive dashboard UI. Built REST APIs for task operations and state synchronization using Node.js, covering full CRUD, user sessions, and persistent storage.</div>
+            <ul class="pmetrics">
+              <li class="pmetric"><strong>Real-time</strong> live task updates</li>
+              <li class="pmetric"><strong>&lt;100ms</strong> API response time</li>
+              <li class="pmetric"><strong>Full CRUD</strong> with Node.js backend</li>
+            </ul>
+            <div class="pfoot">
+              <div class="ptags">
+                <span class="ptag pr">Node.js</span>
+                <span class="ptag po">React</span>
+                <span class="ptag pw">MongoDB</span>
+                <span class="ptag pw">REST API</span>
+              </div>
+              <div class="pactions">
+                <a href="https://smart-task-manager-4.onrender.com/" target="_blank" rel="noopener" class="pact pact-primary">Live Demo</a>
+                <a href="https://github.com/suhaas2006/smart-task-manager" target="_blank" rel="noopener" class="pact pact-ghost">Source Code</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="proj-row" data-category="ml">
+            <div class="proj-top">
+              <div class="picon" style="background:rgba(80,35,15,0.12)">3D</div>
+              <div class="phead">
+                <div class="pname">3D Reconstruction System</div>
+                <div class="pstat"><span class="sdot sd"></span>Complete</div>
+              </div>
+            </div>
+            <div class="pdesc">Built a 3D reconstruction pipeline using COLMAP from 300+ real-world images, generating sparse and dense point clouds with camera pose estimation. Implemented photogrammetry workflow including feature extraction, matching, and 3D model generation.</div>
+            <ul class="pmetrics">
+              <li class="pmetric"><strong>300+</strong> images processed</li>
+              <li class="pmetric"><strong>Sparse + Dense</strong> point-cloud output</li>
+              <li class="pmetric"><strong>Camera Pose</strong> estimation</li>
+            </ul>
+            <div class="pfoot">
+              <div class="ptags">
+                <span class="ptag pr">COLMAP</span>
+                <span class="ptag po">Python</span>
+                <span class="ptag pw">OpenCV</span>
+                <span class="ptag pw">Photogrammetry</span>
+              </div>
+              <div class="pactions">
+                <a href="https://github.com/suhaas2006/3D-Reconstruction-COLMAP" target="_blank" rel="noopener" class="pact pact-ghost">Source Code</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="proj-row" data-category="tooling">
+            <div class="proj-top">
+              <div class="picon" style="background:rgba(60,30,10,0.12)">AUT</div>
+              <div class="phead">
+                <div class="pname">Smart File Organizer</div>
+                <div class="pstat"><span class="sdot sd"></span>Complete</div>
+              </div>
+            </div>
+            <div class="pdesc">Created an automated file organization system to categorize and manage files efficiently. Implemented logic-based file classification and directory management using scripting, reducing manual effort through rule-based automation.</div>
+            <ul class="pmetrics">
+              <li class="pmetric"><strong>Automated</strong> file sorting</li>
+              <li class="pmetric"><strong>Rule-based</strong> classification logic</li>
+              <li class="pmetric"><strong>Reduced</strong> manual file effort</li>
+            </ul>
+            <div class="pfoot">
+              <div class="ptags">
+                <span class="ptag po">Python</span>
+                <span class="ptag pw">Scripting</span>
+                <span class="ptag pw">Automation</span>
+              </div>
+              <div class="pactions">
+                <a href="https://github.com/suhaas2006/smart-file-organizer" target="_blank" rel="noopener" class="pact pact-ghost">Source Code</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="below">
+  <div class="wrap">
+    <div id="identity" class="about-grid">
+      <div>
+        <div class="slabel" data-r>Identity File</div>
+        <h2 class="about-h" data-r>Professional <em>identity</em> with clear, usable profile details.</h2>
+        <p class="about-p" data-r>Computer Science undergraduate with hands-on experience building scalable data pipelines, backend systems, and automated data processing workflows. Focused on practical performance improvements, reliable architecture, and intelligent data-driven products.</p>
+      </div>
+
+      <div class="terminal" data-r-right>
+        <div class="t-top">
+          <div class="t-dot" style="background:#7a1010"></div>
+          <div class="t-dot" style="background:#7a5010"></div>
+          <div class="t-dot" style="background:#2a4c20"></div>
+          <span class="t-fname">// profile.classified.ts</span>
+        </div>
+        <div class="tl"><span class="k">const</span> <span class="v">operative</span> = {</div>
+        <div class="tl">&nbsp;&nbsp;<span class="s">id</span>: <span class="v">"Suhaas_Choudary_Mallavarapu"</span>,</div>
+        <div class="tl">&nbsp;&nbsp;<span class="s">clearance</span>: <span class="v">"FULL_STACK"</span>,</div>
+        <div class="tl">&nbsp;&nbsp;<span class="s">assets</span>: [<span class="v">"React"</span>, <span class="v">"Node"</span>, <span class="v">"Python"</span>],</div>
+        <div class="tl">&nbsp;&nbsp;<span class="s">mission</span>: <span class="v">"3D_RECONSTRUCTION"</span>,</div>
+        <div class="tl">&nbsp;&nbsp;<span class="s">status</span>: <span class="k">ACTIVE</span>,</div>
+        <div class="tl">&nbsp;&nbsp;<span class="s">threat_level</span>: <span class="v">"&infin;"</span>,</div>
+        <div class="tl">};</div>
+        <div class="tl" style="margin-top:10px;color:var(--ember)">&gt; <span style="color:var(--text2)">Awaiting mission briefing.</span></div>
+      </div>
+
+      <div class="profile-shell">
+        <div class="profile-block" data-r>
+          <div class="profile-head">
+            <div>
+              <div class="profile-name">Suhaas Choudary Mallavarapu</div>
+              <div class="profile-role">Full-Stack Developer &bull; ML Systems</div>
+            </div>
+            <div class="profile-actions">
+              <a class="mini-btn" href="https://github.com/suhaas2006" target="_blank" rel="noopener">GitHub</a>
+              <a class="mini-btn" href="assets/resume/resume.pdf" target="_blank" rel="noopener">Download Resume</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-grid">
+          <div class="profile-card" data-r>
+            <div class="pc-title">Summary</div>
+            <p class="pc-copy">Computer Science undergraduate with hands-on experience in scalable data pipelines, backend systems, and automated data workflows. Delivered measurable gains including 35% faster processing and 60% lower retrieval latency across end-to-end projects.</p>
+          </div>
+
+          <div class="profile-card" data-r>
+            <div class="pc-title">Links &amp; Contact</div>
+            <ul class="contact-list">
+              <li><span class="label-line">Name</span> Suhaas Choudary Mallavarapu</li>
+              <li><span class="label-line">Email</span> <a href="mailto:suhaaschoudarymallavarapu10@gmail.com" target="_blank" rel="noopener">suhaaschoudarymallavarapu10@gmail.com</a></li>
+              <li><span class="label-line">LinkedIn</span> <a href="https://www.linkedin.com/in/suhaas-choudary-mallavarapu-b8b5872b5" target="_blank" rel="noopener">Suhaas Choudary Mallavarapu</a></li>
+              <li><span class="label-line">GitHub</span> <a href="https://github.com/suhaas2006" target="_blank" rel="noopener">github.com/suhaas2006</a></li>
+            </ul>
+          </div>
+
+          <div class="profile-card" data-r>
+            <div class="pc-title">Skills</div>
+            <ul class="skill-list">
+              <li>Python</li>
+              <li>C</li>
+              <li>Node.js</li>
+              <li>MongoDB</li>
+              <li>REST APIs</li>
+              <li>Data Pipelines</li>
+              <li>Batch Processing</li>
+              <li>Schema Validation</li>
+              <li>OpenCV</li>
+              <li>NumPy</li>
+              <li>PyMongo</li>
+              <li>Git &amp; GitHub</li>
+              <li>System Design</li>
+            </ul>
+          </div>
+
+          <div class="profile-card" data-r>
+            <div class="pc-title">Project Highlights</div>
+            <ul class="highlight-list">
+              <li>
+                <span class="highlight-title">Scalable Data Processing Pipeline for 3D Reconstruction</span>
+                Processed 300+ images across a 4-stage pipeline and improved per-record processing time by 35% while increasing output quality by 40% through geometric verification.
+              </li>
+              <li>
+                <span class="highlight-title">Modular Student Record Management System</span>
+                Built a CRUD backend on a 3-layer architecture and reduced lookup time by 60% across 1,000+ records using hash-based indexing and optimized data structures.
+              </li>
+              <li>
+                <span class="highlight-title">Smart Task Manager</span>
+                Delivered a publicly accessible full-stack application with real-time updates, a structured Node.js backend, and production-ready project presentation.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="arsenal" class="stack-section">
+      <div class="slabel" data-r>Arsenal</div>
+      <div class="stack-grid">
+        <div class="stack-card" data-r><div class="si">FRNT</div><div class="sn">React / Next.js</div><div class="sr">Frontend &amp; SSR</div></div>
+        <div class="stack-card" data-r><div class="si">API</div><div class="sn">Node.js</div><div class="sr">Backend APIs</div></div>
+        <div class="stack-card" data-r><div class="si">ML</div><div class="sn">Python</div><div class="sr">ML &amp; Pipelines</div></div>
+        <div class="stack-card" data-r><div class="si">DB</div><div class="sn">MongoDB</div><div class="sr">Database</div></div>
+        <div class="stack-card" data-r><div class="si">TS</div><div class="sn">TypeScript</div><div class="sr">Type Safety</div></div>
+        <div class="stack-card" data-r><div class="si">OPS</div><div class="sn">Docker</div><div class="sr">Containers</div></div>
+        <div class="stack-card" data-r><div class="si">3D</div><div class="sn">COLMAP</div><div class="sr">3D Vision</div></div>
+        <div class="stack-card" data-r><div class="si">RT</div><div class="sn">Socket.io</div><div class="sr">Real-time</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="contact">
+  <div class="f-brand">
+    <div class="f-name">Suhaas Choudary Mallavarapu</div>
+    <div class="f-role">Suhaas Choudary Mallavarapu . Full-Stack Developer &bull; ML Systems</div>
+  </div>
+  <ul class="f-links">
+    <li><a href="#projects-anchor">Projects</a></li>
+    <li><a href="#identity">Identity</a></li>
+    <li><a href="#arsenal">Arsenal</a></li>
+    <li><a href="https://github.com/suhaas2006" target="_blank" rel="noopener">GitHub</a></li>
+  </ul>
+  <div class="f-copy">// Classified . 2026 . Suhaas Choudary Mallavarapu</div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+window.addEventListener("scroll", () => {
+  document.getElementById("nav").classList.toggle("scrolled", window.scrollY > 60);
+}, { passive: true });
+
+const wm = document.getElementById("watermark");
+window.addEventListener("scroll", () => {
+  const y = Math.min(window.scrollY * 0.05, 40);
+  wm.style.transform = "translate(-50%, calc(-50% + " + y + "px))";
+}, { passive: true });
+
+gsap.timeline({ delay: 0.35 })
+  .to("#sl", { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" })
+  .to("#t1", { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.22")
+  .to("#t2", { opacity: 1, y: 0, duration: 0.78, ease: "power3.out" }, "-=0.56")
+  .to("#hn", { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, "-=0.42")
+  .to("#hr", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.34")
+  .to("#hd", { opacity: 1, duration: 0.42, ease: "power2.out" }, "-=0.22")
+  .to("#hs", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.26")
+  .to("#hc", { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, "-=0.28")
+  .to("#stats-row", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.2")
+  .to("#scroll-cue", { opacity: 1, duration: 0.35, ease: "power1.out" }, "-=0.05");
+
+gsap.fromTo(
+  "#hero-content",
+  { opacity: 1 },
+  {
+    opacity: 0,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: "#scroll-scene",
+      start: () => window.innerHeight * 0.4,
+      end: () => window.innerHeight * 0.78,
+      scrub: 1,
+      invalidateOnRefresh: true
+    }
+  }
+);
+
+gsap.fromTo(
+  "#stage-light",
+  { opacity: 1 },
+  {
+    opacity: 0.2,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: "#scroll-scene",
+      start: () => window.innerHeight * 0.4,
+      end: () => window.innerHeight * 0.78,
+      scrub: 1,
+      invalidateOnRefresh: true
+    }
+  }
+);
+
+gsap.fromTo(
+  "#dashboard-wrap",
+  { opacity: 0, y: 60, scale: 0.96 },
+  {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: "#scroll-scene",
+      start: () => window.innerHeight * 0.4,
+      end: () => window.innerHeight * 0.78,
+      scrub: 1,
+      invalidateOnRefresh: true
+    }
+  }
+);
+
+document.querySelectorAll("[data-r]").forEach((el, i) => {
+  gsap.fromTo(
+    el,
+    { opacity: 0, y: 22 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: "power2.out",
+      delay: (i % 4) * 0.06,
+      scrollTrigger: {
+        trigger: el,
+        start: "top 90%",
+        toggleActions: "play none none none"
+      }
+    }
+  );
+});
+
+document.querySelectorAll("[data-r-right]").forEach((el) => {
+  gsap.fromTo(
+    el,
+    { opacity: 0, x: 18 },
+    {
+      opacity: 1,
+      x: 0,
+      duration: 0.8,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: el,
+        start: "top 86%",
+        toggleActions: "play none none none"
+      }
+    }
+  );
+});
+
+document.querySelectorAll(".db-tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".db-tab").forEach((node) => node.classList.remove("active"));
+    tab.classList.add("active");
+
+    const filter = tab.dataset.filter;
+    document.querySelectorAll(".proj-row").forEach((row) => {
+      const matches = filter === "all" || row.dataset.category === filter;
+      row.style.display = matches ? "flex" : "none";
+    });
+  });
+});
+
+document.querySelectorAll(".db-btn").forEach((button) => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".db-btn").forEach((node) => node.classList.remove("db-btn-f"));
+    button.classList.add("db-btn-f");
+  });
+});
+
+document.querySelectorAll(".proj-row").forEach((row) => {
+  row.addEventListener("click", () => {
+    document.querySelectorAll(".proj-row").forEach((node) => node.classList.remove("ar"));
+    row.classList.add("ar");
+  });
+});
+
+document.querySelectorAll("[data-section-link]").forEach((item) => {
+  item.addEventListener("click", () => {
+    document.querySelectorAll("[data-section-link]").forEach((node) => node.classList.remove("active"));
+    item.classList.add("active");
+  });
+});
+
+document.querySelectorAll(".pact, .db-btn").forEach((el) => {
+  el.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+});
+
+document.querySelectorAll("a[href^='#']").forEach((anchor) => {
+  anchor.addEventListener("click", (e) => {
+    const target = document.querySelector(anchor.getAttribute("href"));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+});
+
+const demoOverlay = document.getElementById("demo-loader-overlay");
+const liveDemoButton = document.querySelector('a.pact-primary[href="https://smart-task-manager-4.onrender.com/"]');
+
+if (liveDemoButton && demoOverlay) {
+  liveDemoButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    const demoUrl = liveDemoButton.href;
+    liveDemoButton.textContent = "Live Demo (initializing...)";
+    liveDemoButton.setAttribute("aria-busy", "true");
+    liveDemoButton.style.pointerEvents = "none";
+    demoOverlay.setAttribute("aria-hidden", "false");
+    demoOverlay.classList.add("active");
+    setTimeout(() => {
+      window.open(demoUrl, "_blank");
+    }, 2400);
+  });
+}
+
+const cursor = document.getElementById("cursor");
+const cursorChar = document.getElementById("cursor-char");
+
+document.addEventListener("mousemove", (e) => {
+  const x = e.clientX;
+  const y = e.clientY;
+  cursorChar.style.left = x + "px";
+  cursorChar.style.top = y + "px";
+});
+
+document.querySelectorAll("a, button, .proj-row, .stack-card, .chip, .db-tab, .db-ni, .pact, .mini-btn, .resume-close").forEach((el) => {
+  el.addEventListener("mouseenter", () => {
+    cursorChar.classList.add("hov");
+  });
+
+  el.addEventListener("mouseleave", () => {
+    cursorChar.classList.remove("hov");
+  });
+});
+</script>
+</body>
+</html>
